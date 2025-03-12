@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Practica tu Pronunciación</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+    .float-animation {
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes pulse-border {
+      0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+    }
+    .pulse-border {
+      animation: pulse-border 2s infinite;
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in {
+      animation: fadeIn 0.6s ease-out forwards;
+    }
+    @keyframes rotateIn {
+      0% { transform: rotate(-10deg) scale(0.9); opacity: 0; }
+      100% { transform: rotate(0) scale(1); opacity: 1; }
+    }
+    .rotate-in {
+      animation: rotateIn 0.5s ease-out forwards;
+    }
+    @keyframes spinner {
+      to {transform: rotate(360deg);}
+    }
+    .spinner {
+      animation: spinner 1.5s linear infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    .pulse-animation {
+      animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    @keyframes appear {
+      0% { opacity: 0; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    .appear {
+      animation: appear 0.5s forwards;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-100 to-purple-100 min-h-screen flex items-center justify-center p-4">
+  <div class="max-w-md w-full">
+    <!-- Logo Container con animación flotante -->
+    <div class="flex justify-center mb-4">
+      <img src="https://portal.clasingelts.com/v1/clasing-logo.svg" alt="Logo" class="h-12 object-contain float-animation">
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-xl w-full p-6 relative overflow-hidden fade-in">
+      <div class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-full opacity-10"></div>
+      <div class="absolute bottom-0 left-0 -mb-10 -ml-10 w-40 h-40 bg-gradient-to-tr from-indigo-400 to-purple-500 rounded-full opacity-10"></div>
+      
+      <div class="text-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-800 mb-2">Practica tu Pronunciación</h1>
+        <p class="text-gray-600">Lee la frase, grábala y recibe corrección</p>
+      </div>
+      
+      <!-- Tarjeta de frase para leer - Ahora con animación -->
+      <div class="mb-8">
+        <div id="phrase-card" class="bg-indigo-50 rounded-xl p-5 shadow-md border border-indigo-100 transition-all duration-300">
+          <h2 class="text-sm uppercase tracking-wide text-indigo-600 font-semibold mb-2">Frase a leer:</h2>
+          <p id="current-phrase" class="text-xl font-medium text-gray-800 transition-all duration-300">El sol brilla en el cielo azul durante todo el día.</p>
+          <button 
+            id="new-phrase-btn" 
+            class="mt-4 text-indigo-600 hover:text-indigo-800 text-sm font-medium flex items-center justify-center w-full transition-colors duration-200">
+            <i class="fas fa-random mr-2"></i> Nueva frase
+          </button>
+        </div>
+      </div>
+      
+      <!-- Sección de grabación - Botón con animación -->
+      <div class="mb-8">
+        <div id="recording-container" class="flex flex-col items-center">
+          <button 
+            id="record-btn" 
+            class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-4 px-8 rounded-full shadow-lg flex items-center justify-center transition-all duration-200 transform hover:scale-105 w-56 pulse-border">
+            <i class="fas fa-microphone mr-2 text-lg"></i>
+            <span class="text-lg">Comenzar grabación</span>
+          </button>
+          
+          <div id="recording-indicator" class="mt-5 hidden w-full fade-in">
+            <div class="flex items-center justify-center mb-2">
+              <div class="w-3 h-3 bg-red-500 rounded-full animate-pulse mr-2"></div>
+              <span class="text-red-500 font-medium">Grabando...</span>
+            </div>
+            <div class="w-full h-16 bg-gray-100 rounded-lg overflow-hidden shadow-inner">
+              <div class="h-full flex items-center justify-center">
+                <div class="flex space-x-2">
+                  <div class="w-1 bg-indigo-400 h-3 animate-bounce"></div>
+                  <div class="w-1 bg-indigo-500 h-5 animate-bounce" style="animation-delay: 0.1s"></div>
+                  <div class="w-1 bg-indigo-600 h-8 animate-bounce" style="animation-delay: 0.2s"></div>
+                  <div class="w-1 bg-indigo-700 h-10 animate-bounce" style="animation-delay: 0.3s"></div>
+                  <div class="w-1 bg-indigo-600 h-8 animate-bounce" style="animation-delay: 0.4s"></div>
+                  <div class="w-1 bg-indigo-500 h-6 animate-bounce" style="animation-delay: 0.5s"></div>
+                  <div class="w-1 bg-indigo-600 h-8 animate-bounce" style="animation-delay: 0.6s"></div>
+                  <div class="w-1 bg-indigo-700 h-12 animate-bounce" style="animation-delay: 0.7s"></div>
+                  <div class="w-1 bg-indigo-600 h-8 animate-bounce" style="animation-delay: 0.8s"></div>
+                  <div class="w-1 bg-indigo-500 h-5 animate-bounce" style="animation-delay: 0.9s"></div>
+                  <div class="w-1 bg-indigo-400 h-3 animate-bounce" style="animation-delay: 1.0s"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Pantalla de procesamiento con pasos -->
+      <div id="processing-container" class="hidden">
+        <div class="text-center mb-6">
+          <h2 class="text-xl font-semibold text-indigo-700 mb-2">Procesando tu grabación</h2>
+          <p class="text-gray-600">Estamos analizando tu pronunciación</p>
+        </div>
+        
+        <div class="flex flex-col space-y-5 mt-8">
+          <!-- Paso 1: Preparando audio -->
+          <div id="step-1" class="flex items-center">
+            <div class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
+              <span id="step-1-icon" class="text-indigo-600 spinner">
+                <i class="fas fa-microphone-alt"></i>
+              </span>
+            </div>
+            <div class="ml-4 flex-1">
+              <h3 class="text-sm font-medium text-gray-700">Preparando grabación</h3>
+              <p id="step-1-text" class="text-sm text-gray-500 pulse-animation">Convirtiendo audio...</p>
+            </div>
+          </div>
+          
+          <!-- Paso 2: Analizando pronunciación -->
+          <div id="step-2" class="flex items-center opacity-40">
+            <div class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
+              <span id="step-2-icon" class="text-indigo-400">
+                <i class="fas fa-language"></i>
+              </span>
+            </div>
+            <div class="ml-4 flex-1">
+              <h3 class="text-sm font-medium text-gray-700">Analizando pronunciación</h3>
+              <p id="step-2-text" class="text-sm text-gray-500">Pendiente...</p>
+            </div>
+          </div>
+          
+          <!-- Paso 3: Generando corrección -->
+          <div id="step-3" class="flex items-center opacity-40">
+            <div class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
+              <span id="step-3-icon" class="text-indigo-400">
+                <i class="fas fa-volume-up"></i>
+              </span>
+            </div>
+            <div class="ml-4 flex-1">
+              <h3 class="text-sm font-medium text-gray-700">Generando corrección</h3>
+              <p id="step-3-text" class="text-sm text-gray-500">Pendiente...</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="mt-10 flex justify-center">
+          <div class="w-20 h-20">
+            <svg class="animate-spin -ml-1 mr-3 h-20 w-20 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          </div>
+        </div>
+
+        <div class="text-center text-sm text-gray-500 mt-6">
+          Esto puede tomar unos momentos. ¡Gracias por tu paciencia!
+        </div>
+      </div>
+      
+      <!-- Resultado y corrección -->
+      <div id="result-container" class="hidden">
+        <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-md mb-5 rotate-in" style="opacity: 0;">
+          <div class="flex items-center mb-2">
+            <i class="fas fa-microphone text-indigo-500 mr-2"></i>
+            <h2 class="text-sm uppercase tracking-wide text-indigo-600 font-semibold">Tu grabación:</h2>
+          </div>
+          <div class="flex items-center justify-between">
+            <div class="flex-1">
+              <audio id="user-recording" controls class="w-full h-10"></audio>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-green-50 rounded-xl p-5 border border-green-100 shadow-md rotate-in" style="opacity: 0; animation-delay: 0.2s;">
+          <div class="flex items-center mb-2">
+            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+            <h2 class="text-sm uppercase tracking-wide text-green-600 font-semibold">Corrección:</h2>
+          </div>
+          <div class="flex items-center justify-between">
+            <div class="flex-1">
+              <audio id="correction-audio" controls class="w-full h-10"></audio>
+            </div>
+          </div>
+          <div class="mt-4 bg-white p-3 rounded-lg border border-green-100">
+            <p class="text-sm text-gray-600"><span class="font-medium text-green-600">Comentarios:</span> <span id="feedback-text">Buena entonación. Presta atención a la pronunciación de "brilla".</span></p>
+          </div>
+        </div>
+        
+        <button 
+          id="try-again-btn" 
+          class="mt-6 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-6 rounded-full shadow-lg flex items-center justify-center transition-all duration-200 transform hover:scale-105 w-full rotate-in" style="opacity: 0; animation-delay: 0.4s;">
+          <i class="fas fa-redo mr-2"></i>
+          <span>Intentar de nuevo</span>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Footer con créditos -->
+    <div class="text-center mt-4 text-xs text-gray-500">
+      © 2025 SpeakWell - Mejora tu pronunciación
+    </div>
+  </div>
+
+  <script>
+    // Array de frases de ejemplo
+    const phrases = [
+    "The bright and golden sun shines beautifully in the vast blue sky throughout the entire day.",
+    "I really enjoy taking long and peaceful walks in the lovely green park when the weather is nice and pleasant.",
+    "Happy and energetic children love to play joyfully in the big and colorful schoolyard during their break time.",
+    "Listening to soft and relaxing classical music is a wonderful way to unwind after a long and exhausting day.",
+    "During the warm and sunny summer, many people love spending their vacations at the beautiful sandy beach by the ocean.",
+    "Exciting and imaginative science fiction books take readers on fantastic adventures to new and mysterious worlds.",
+    "A delicious cup of hot and creamy chocolate is perfect for keeping warm on cold and chilly winter days.",
+    "The tall and majestic mountains get covered with thick and fluffy white snow when winter arrives.",
+    "Modern and advanced technology has completely changed the way we easily and quickly communicate with each other."
+];
+    
+    // Elementos DOM
+    const currentPhrase = document.getElementById('current-phrase');
+    const phraseCard = document.getElementById('phrase-card');
+    const newPhraseBtn = document.getElementById('new-phrase-btn');
+    const recordBtn = document.getElementById('record-btn');
+    const recordingIndicator = document.getElementById('recording-indicator');
+    const resultContainer = document.getElementById('result-container');
+    const processingContainer = document.getElementById('processing-container');
+    const tryAgainBtn = document.getElementById('try-again-btn');
+    
+    // Variables para controlar el estado de la aplicación
+    let isProcessing = false;
+    let isRecording = false;
+    let mediaRecorder;
+    let audioChunks = [];
+    let audioBlob;
+    let audioUrl;
+    
+    // Función para solicitar permisos de audio
+    async function setupAudio() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        return stream;
+      } catch (error) {
+        console.error('Error al acceder al micrófono:', error);
+        alert('No se pudo acceder al micrófono. Por favor, verifica los permisos y vuelve a intentarlo.');
+        return null;
+      }
+    }
+    
+    // Cambiar frase aleatoriamente
+    newPhraseBtn.addEventListener('click', () => {
+      // No permitir cambiar la frase durante el procesamiento
+      if (isProcessing) {
+        // Efecto de sacudida para indicar que no se puede cambiar
+        phraseCard.classList.add('animate-shake');
+        setTimeout(() => {
+          phraseCard.classList.remove('animate-shake');
+        }, 500);
+        return;
+      }
+      
+      const randomIndex = Math.floor(Math.random() * phrases.length);
+      
+      // Animación para cambiar la frase
+      currentPhrase.style.opacity = '0';
+      currentPhrase.style.transform = 'translateY(-10px)';
+      
+      setTimeout(() => {
+        currentPhrase.textContent = phrases[randomIndex];
+        currentPhrase.style.opacity = '1';
+        currentPhrase.style.transform = 'translateY(0)';
+      }, 300);
+      
+      // Efecto de brillo para el cambio
+      phraseCard.classList.add('shadow-indigo-200');
+      phraseCard.style.borderColor = '#818cf8';
+      setTimeout(() => {
+        phraseCard.classList.remove('shadow-indigo-200');
+        phraseCard.style.borderColor = '';
+      }, 800);
+    });
+    
+    // Manejo de grabación
+    recordBtn.addEventListener('click', async () => {
+      if (!isRecording) {
+        // INICIAR GRABACIÓN
+        const stream = await setupAudio();
+        if (!stream) return;
+        
+        isRecording = true;
+        isProcessing = true;
+        
+        // Preparar la grabación
+        mediaRecorder = new MediaRecorder(stream);
+        audioChunks = [];
+        
+        mediaRecorder.ondataavailable = (event) => {
+          audioChunks.push(event.data);
+        };
+        
+        mediaRecorder.onstop = () => {
+          // Crear el blob cuando se detenga la grabación
+          audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
+          audioUrl = URL.createObjectURL(audioBlob);
+          
+          // Asignar el audio al elemento de reproducción
+          const userRecording = document.getElementById('user-recording');
+          userRecording.src = audioUrl;
+          
+          // Mostrar pantalla de procesamiento
+          recordingIndicator.classList.add('hidden');
+          recordBtn.classList.add('hidden');
+          processingContainer.classList.remove('hidden');
+          
+          // Iniciar procesamiento real con las APIs
+          processAudio();
+        };
+        
+        // Comenzar a grabar
+        mediaRecorder.start();
+        
+        // Desactivar visualmente el botón de nueva frase
+        newPhraseBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        newPhraseBtn.disabled = true;
+        
+        // Mostrar indicador de grabación
+        recordingIndicator.classList.remove('hidden');
+        recordBtn.classList.add('bg-red-600', 'hover:bg-red-700');
+        recordBtn.classList.remove('bg-indigo-600', 'hover:bg-indigo-700', 'pulse-border');
+        recordBtn.innerHTML = '<i class="fas fa-stop-circle mr-2"></i><span>Detener grabación</span>';
+      } else {
+        // DETENER GRABACIÓN
+        isRecording = false;
+        if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+          mediaRecorder.stop();
+        }
+      }
+    });
+    
+    // Función para procesar el audio con las APIs reales
+    async function processAudio() {
+      try {
+        // Completar paso 1 - Preparación del audio
+        document.getElementById('step-1-icon').classList.remove('spinner');
+        document.getElementById('step-1-icon').innerHTML = '<i class="fas fa-check"></i>';
+        document.getElementById('step-1-text').classList.remove('pulse-animation');
+        document.getElementById('step-1-text').textContent = 'Audio procesado correctamente';
+        
+        // Iniciar paso 2 - Clonación de voz
+        document.getElementById('step-2').classList.remove('opacity-40');
+        document.getElementById('step-2').classList.add('appear');
+        document.getElementById('step-2-icon').classList.add('spinner');
+        document.getElementById('step-2-text').classList.add('pulse-animation');
+        document.getElementById('step-2-text').textContent = 'Clonando tu voz...';
+        
+        // Enviar audio a la API para clonar voz
+        const currentPhraseText = currentPhrase.textContent;
+        const cloneResult = await sendAudioToAPI(audioBlob, currentPhraseText);
+        
+        if (!cloneResult.success) {
+          throw new Error('Error al clonar la voz');
+        }
+        
+        // Completar paso 2
+        document.getElementById('step-2-icon').classList.remove('spinner');
+        document.getElementById('step-2-icon').innerHTML = '<i class="fas fa-check"></i>';
+        document.getElementById('step-2-text').classList.remove('pulse-animation');
+        document.getElementById('step-2-text').textContent = 'Voz clonada correctamente';
+        
+        // Iniciar paso 3 - Generación de audio de corrección
+        document.getElementById('step-3').classList.remove('opacity-40');
+        document.getElementById('step-3').classList.add('appear');
+        document.getElementById('step-3-icon').classList.add('spinner');
+        document.getElementById('step-3-text').classList.add('pulse-animation');
+        document.getElementById('step-3-text').textContent = 'Generando audio de corrección...';
+        
+        // Solicitar audio de corrección con la voz clonada
+        const audioUrl = await getCorrectAudio(currentPhraseText, cloneResult.voiceId);
+        
+        if (!audioUrl) {
+          throw new Error('Error al generar el audio de corrección');
+        }
+        
+        // Completar paso 3
+        document.getElementById('step-3-icon').classList.remove('spinner');
+        document.getElementById('step-3-icon').innerHTML = '<i class="fas fa-check"></i>';
+        document.getElementById('step-3-text').classList.remove('pulse-animation');
+        document.getElementById('step-3-text').textContent = 'Corrección generada';
+        
+        // Esperar un momento antes de mostrar resultados
+        setTimeout(() => {
+          // Ocultar procesamiento y mostrar resultados
+          processingContainer.classList.add('hidden');
+          resultContainer.classList.remove('hidden');
+          
+          // Asignar audio de corrección al elemento de reproducción
+          document.getElementById('correction-audio').src = audioUrl;
+          
+          // Generar retroalimentación basada en la frase actual
+          const feedbacks = [
+            "Buena entonación. Presta atención a la pronunciación de 'brilla'.",
+            "Buen trabajo. Mejora la claridad en 'cuando hace buen tiempo'.",
+            "Pronunciación clara. Cuida la entonación en 'alegremente'.",
+            "Muy bien. Mejora un poco el ritmo en 'música clásica'.",
+            "Buen intento. Presta atención a la entonación en 'vacaciones'.",
+            "Pronunciación aceptable. Mejora la fluidez en 'ciencia ficción'.",
+            "Buen trabajo. Cuida la claridad en 'chocolate caliente'.",
+            "Buena entonación. Mejora la pronunciación de 'nieve'.",
+            "Pronunciación clara. Trabaja en el ritmo de la frase completa."
+          ];
+          
+          // Encontrar el índice de la frase actual
+          const phraseIndex = phrases.indexOf(currentPhraseText);
+          
+          // Asignar retroalimentación correspondiente o una genérica
+          document.getElementById('feedback-text').textContent = 
+            phraseIndex >= 0 ? feedbacks[phraseIndex] : "Buen intento. Sigue practicando la fluidez.";
+          
+          // Animar aparición de elementos de resultado
+          const resultElements = document.querySelectorAll('.rotate-in');
+          resultElements.forEach(el => {
+            el.style.opacity = '1';
+          });
+        }, 800);
+        
+      } catch (error) {
+        console.error('Error en el procesamiento:', error);
+        alert('Hubo un error en el procesamiento: ' + error.message);
+        
+        // Reiniciar la interfaz en caso de error
+        processingContainer.classList.add('hidden');
+        recordBtn.classList.remove('hidden');
+        recordBtn.classList.remove('bg-red-600', 'hover:bg-red-700');
+        recordBtn.classList.add('bg-indigo-600', 'hover:bg-indigo-700', 'pulse-border');
+        recordBtn.innerHTML = '<i class="fas fa-microphone mr-2"></i><span>Comenzar grabación</span>';
+        
+        // Reactivar el botón de nueva frase
+        isProcessing = false;
+        isRecording = false;
+        newPhraseBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        newPhraseBtn.disabled = false;
+      }
+    }
+    
+    // Volver a intentar
+    tryAgainBtn.addEventListener('click', () => {
+      resultContainer.classList.add('hidden');
+      recordBtn.classList.remove('hidden', 'bg-red-600', 'hover:bg-red-700');
+      recordBtn.classList.add('bg-indigo-600', 'hover:bg-indigo-700', 'pulse-border');
+      recordBtn.innerHTML = '<i class="fas fa-microphone mr-2"></i><span>Comenzar grabación</span>';
+      
+      // Restablecer los elementos rotados
+      const resultElements = document.querySelectorAll('.rotate-in');
+      resultElements.forEach(el => {
+        el.style.opacity = '0';
+      });
+      
+      // Generar automáticamente una nueva frase
+      const randomIndex = Math.floor(Math.random() * phrases.length);
+      currentPhrase.textContent = phrases[randomIndex];
+      
+      // Reactivar el botón de nueva frase
+      isProcessing = false;
+      isRecording = false;
+      newPhraseBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+      newPhraseBtn.disabled = false;
+      
+      // Liberar recursos
+      if (audioUrl) {
+        URL.revokeObjectURL(audioUrl);
+      }
+    });
+    
+    // Variables para almacenar el ID de la voz clonada
+    let voiceId = null;
+    const BACKEND_URL = 'http://localhost:8005';
+
+    // Función para enviar audio a la API para clonar la voz
+    async function sendAudioToAPI(audioBlob, phrase) {
+      try {
+        // Mostrar mensaje de estado
+        document.getElementById('step-2-text').textContent = 'Enviando audio para clonar voz...';
+        
+        // Crear FormData y añadir el archivo de audio
+        const formData = new FormData();
+        formData.append('file', audioBlob, 'recording.mp3');
+        
+        // Enviar a nuestro backend que conecta con ElevenLabs
+        const response = await fetch(`${BACKEND_URL}/clone-voice`, {
+          method: 'POST',
+          body: formData
+        });
+        
+        if (!response.ok) {
+          throw new Error('Error al clonar la voz');
+        }
+        
+        const result = await response.json();
+        
+        // Guardar el ID de la voz para usarlo después
+        voiceId = result.voice_id;
+        
+        return {
+          success: true,
+          voiceId: voiceId,
+          phrase: phrase
+        };
+      } catch (error) {
+        console.error('Error al enviar audio a la API:', error);
+        document.getElementById('step-2-text').textContent = 'Error: ' + error.message;
+        return { 
+          success: false, 
+          error: 'No se pudo conectar con el servicio de clonación de voz' 
+        };
+      }
+    }
+    
+    // Función para solicitar audio de corrección usando la voz clonada
+    async function getCorrectAudio(phrase, voiceId) {
+      try {
+        // Mostrar mensaje de estado
+        document.getElementById('step-3-text').textContent = 'Generando audio con tu voz...';
+        
+        if (!voiceId) {
+          throw new Error('No se ha creado una voz clonada');
+        }
+        
+        // Enviar solicitud para generar TTS con la voz clonada
+        const response = await fetch(`${BACKEND_URL}/text-to-speech`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            voice_id: voiceId, 
+            text: phrase 
+          })
+        });
+        
+        if (!response.ok) {
+          throw new Error('Error al generar el audio');
+        }
+        
+        const result = await response.json();
+        
+        // Devolver la URL del audio generado
+        return result.url;
+      } catch (error) {
+        console.error('Error al obtener audio de corrección:', error);
+        document.getElementById('step-3-text').textContent = 'Error: ' + error.message;
+        return null;
+      }
+    }
+    
+    // Inicializar con una frase aleatoria al cargar
+    window.addEventListener('load', () => {
+      const randomIndex = Math.floor(Math.random() * phrases.length);
+      currentPhrase.textContent = phrases[randomIndex];
+      
+      // Añadir animación de sacudida
+      document.documentElement.style.setProperty('--animate-shake', `
+        @keyframes shake {
+          0% { transform: translateX(0); }
+          25% { transform: translateX(-5px); }
+          50% { transform: translateX(5px); }
+          75% { transform: translateX(-5px); }
+          100% { transform: translateX(0); }
+        }
+      `);
+      
+      document.documentElement.style.setProperty('--animate-shake-duration', '0.5s');
+      
+      // Añadir la clase personalizada para la animación de sacudida
+      const style = document.createElement('style');
+      style.textContent = `
+        .animate-shake {
+          animation: shake var(--animate-shake-duration, 0.5s) ease-in-out;
+        }
+      `;
+      document.head.appendChild(style);
+    });
+  </script>
+</body>
+</html>
