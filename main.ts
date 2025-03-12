@@ -2,7 +2,7 @@ import { Application, Router, Request, Response,send } from "https://deno.land/x
 import { multiParser } from 'https://deno.land/x/multiparser/mod.ts'
 
 const API_KEY = "sk_4320af543747f76684a97a1e8a4d4556a555bb41f64be0e2";
-const UPLOAD_PATH = "./uploads/";
+const UPLOAD_PATH = "/tmp/uploads/";
 const PUBLIC_PATH = "./public/";
 
 // Crear el directorio de uploads si no existe
